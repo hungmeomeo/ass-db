@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Database Query UI</title>
+    <link rel="stylesheet" href="styles/dashboard-styles.css">
+</head>
+<body>
+    <div class="container">
+        <h2>Database Query</h2>
+
+        <div class="section">
+            <div class="section-header">Query Input <span class="icon">▼</span></div>
+            <div class="section-content">
+                <label for="query">Enter your SQL query:</label>
+                <textarea id="query" placeholder="e.g., SELECT * FROM your_table"></textarea>
+            </div>
+            <button id="executeButton">Execute Query</button>  
+        </div>
+
+
+        <div id="result">
+            <h3>Query Results</h3>
+            <pre id="queryResult"></pre>
+        </div>
+    </div>
+
+    <script src="scripts/dashboard-script.js"></script>
+</body>
+</html>
