@@ -7,12 +7,15 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import { data } from "./data";
 import Q1 from "./components/table";
 import Q2 from "./components/form";
+import Q3 from "./components/CategoriyTable";
+import Q4 from "./components/customerTable";
 import Create from "./components/form";
 import Navbar from "./components/navbar";
 
 function App() {
   return (
     <div>
+      <Q3></Q3>
       <Q2></Q2>
     </div>
   );

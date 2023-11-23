@@ -6,7 +6,7 @@ function generateRandomCode() {
   const characters =
     "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
   let code = "";
-  for (let i = 0; i < 50; i++) {
+  for (let i = 0; i < 4; i++) {
     code += characters.charAt(Math.floor(Math.random() * characters.length));
   }
   return code;
@@ -27,7 +27,7 @@ const Category = sequelize.define(
       primaryKey: true,
       defaultValue: generateRandomCode, // Assuming you have a function like this for generating random codes
     },
-    Name: {
+    CategoryName: {
       type: DataTypes.STRING(255),
     },
     Color: {

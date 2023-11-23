@@ -49,34 +49,36 @@ router.get("/categories", async (req, res) => {
   }
 });
 
-router.post("/customers", async (req, res) => {
+router.get("/customers/:customerCode", async (req, res) => {
   try {
-    const { customerCode } = req.body;
+    const { customerCode } = req.params;
     if (!customerCode) {
       return res
         .status(400)
         .json({ error: "Missing customerCode in the request body" });
     }
 
-    const customers = await getOrders(); // Replace with your actual data retrieval function
+    customers = await getOrders(); // Replace with your actual data retrieval function
+    if (customerCode === "all") {
+      res.json(customers);
+    } else {
+      customer = customers.find((c) => c.CustomerCode === customerCode);
+      if (!customer) {
+        return res.status(404).json({ error: "Customer not found" });
+      }
 
-    const customer = customers.find((c) => c.CustomerCode === customerCode);
+      const categories = customer.Categories;
 
-    if (!customer) {
-      return res.status(404).json({ error: "Customer not found" });
+      res.json(categories);
     }
-
-    const categories = customer.Categories;
-
-    res.json(categories);
   } catch (error) {
     console.error("Error:", error);
     res.status(500).json({ error: "Internal Server Error" });
   }
 });
 
-router.post("/xlsx", async (req, res) => {
-  const { customerCode } = req.body;
+router.get("/xlsx/:customerCode", async (req, res) => {
+  const { customerCode } = req.params;
 
   try {
     const data = await getCategoriesByCustomerCode(customerCode);
@@ -97,8 +99,11 @@ router.post("/xlsx", async (req, res) => {
       XLSX.utils.book_append_sheet(wb, ws, category.CategoryCode);
     });
 
+    // Create a unique file name
+    const fileName = `output_${Date.now()}.xlsx`;
+
     // Specify the path where you want to save the file
-    const filePath = path.join(__dirname, "../../report/output.xlsx");
+    const filePath = path.join(__dirname, "../../report", fileName);
 
     // Write the workbook to the specified file
     XLSX.writeFile(wb, filePath);
@@ -112,12 +117,17 @@ router.post("/xlsx", async (req, res) => {
     );
     res.setHeader(
       "Content-Disposition",
-      `attachment; filename=${encodeURIComponent("output.xlsx")}`
+      `attachment; filename=${encodeURIComponent(fileName)}`
     );
 
     // Pipe the file stream to the response
     const fileStream = fs.createReadStream(filePath);
     fileStream.pipe(res);
+
+    // Delete the file after it's sent
+    fileStream.on("close", () => {
+      fs.unlinkSync(filePath);
+    });
   } catch (error) {
     console.error("Error:", error.message);
     res.status(500).json({ error: "Internal Server Error" });

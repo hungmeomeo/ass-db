@@ -117,3 +117,12 @@ code {
   border-radius: 8px;
   cursor: pointer;
 }
+
+.add-del {
+  display: inline-block;
+  margin-left: 950px;
+}
+
+.form-control btn btn-success {
+  display: inline-block;
+}

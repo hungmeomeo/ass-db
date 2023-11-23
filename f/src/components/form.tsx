@@ -3,18 +3,26 @@ import { Container } from "react-bootstrap";
 
 interface Q2Props {}
 
+interface SupplierData {
+  Name: string;
+  Address: string;
+  BankAccount: string;
+  TaxCode: string;
+}
+
 interface FormValue {
-  name: string;
-  email: string;
-  password: string;
+  supplierData: SupplierData;
   phoneNumbers: string[];
 }
 
 const Q2: React.FC<Q2Props> = (props) => {
   const [formvalue, setFormvalue] = useState<FormValue>({
-    name: "",
-    email: "",
-    password: "",
+    supplierData: {
+      Name: "",
+      Address: "",
+      BankAccount: "",
+      TaxCode: "",
+    },
     phoneNumbers: [""], // Initialize with one empty phone number
   });
 
@@ -22,53 +30,93 @@ const Q2: React.FC<Q2Props> = (props) => {
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
     const { name, value } = e.target;
-    setFormvalue({ ...formvalue, [name]: value });
+
+    // Update supplierData object using the spread operator
+    setFormvalue((prevFormValue) => ({
+      ...prevFormValue,
+      supplierData: {
+        ...prevFormValue.supplierData,
+        [name]: value,
+      },
+    }));
   };
 
   const handlePhoneNumberChange = (index: number, value: string) => {
     const newPhoneNumbers = [...formvalue.phoneNumbers];
     newPhoneNumbers[index] = value;
-    setFormvalue({ ...formvalue, phoneNumbers: newPhoneNumbers });
+
+    // Update phoneNumbers array using the spread operator
+    setFormvalue((prevFormValue) => ({
+      ...prevFormValue,
+      phoneNumbers: newPhoneNumbers,
+    }));
   };
 
   const addPhoneNumber = () => {
-    setFormvalue({
-      ...formvalue,
-      phoneNumbers: [...formvalue.phoneNumbers, ""],
-    });
+    setFormvalue((prevFormValue) => ({
+      ...prevFormValue,
+      phoneNumbers: [...prevFormValue.phoneNumbers, ""],
+    }));
+  };
+
+  const removePhoneNumber = (index: any) => {
+    const updatedPhoneNumbers = [...formvalue.phoneNumbers];
+    updatedPhoneNumbers.splice(index, 1);
+
+    // Update phoneNumbers array using the spread operator
+    setFormvalue((prevFormValue) => ({
+      ...prevFormValue,
+      phoneNumbers: updatedPhoneNumbers,
+    }));
   };
 
   const handleFormsubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    await fetch("http://localhost:3000/suppliers/add", {
+    const { supplierData, phoneNumbers } = formvalue;
+
+    const inputData = {
+      supplierData,
+      phoneNumbers,
+    };
+
+    const response = await fetch("http://localhost:3000/suppliers/add", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        name: formvalue.name,
-        email: formvalue.email,
-        password: formvalue.password,
-        phoneNumbers: formvalue.phoneNumbers,
-      }),
+      body: JSON.stringify(inputData),
     });
-    console.log("success");
-  };
 
+    if (response.ok) {
+      alert("Success");
+    } else {
+      alert("Error");
+      console.log(response); // log error response
+    }
+  };
   return (
     <Container>
       <div>
         <div className="col-12 text-success">
-          <h5 className="mt-4 mb-4 text-white">
-            Post Form Data to Fetch API with React JS
-          </h5>
+          <h1 className="text-center mt-4">Contact Keeper</h1>
+          <div className="add-del">
+            <button className="btn btn-success" onClick={addPhoneNumber}>
+              Add Phone Number
+            </button>
+
+            <button className="btn btn-success" onClick={removePhoneNumber}>
+              Remove Phone Number
+            </button>
+          </div>
+
+          <div className="col-md-2"></div>
 
           <form className="row" onSubmit={handleFormsubmit}>
             <div className="col-md-2">
               <label className="form-label text-white">Name</label>
               <input
                 type="text"
-                name="name"
-                value={formvalue.name}
+                name="Name"
+                value={formvalue.supplierData.Name}
                 onChange={handleInput}
                 className="form-control"
                 placeholder="Name..."
@@ -76,14 +124,38 @@ const Q2: React.FC<Q2Props> = (props) => {
             </div>
 
             <div className="col-md-2">
-              <label className="form-label text-white">Email</label>
+              <label className="form-label text-white">Address</label>
               <input
                 type="text"
-                name="email"
-                value={formvalue.email}
+                name="Address"
+                value={formvalue.supplierData.Address}
                 onChange={handleInput}
                 className="form-control"
-                placeholder="Email..."
+                placeholder="Address..."
+              />
+            </div>
+
+            <div className="col-md-2">
+              <label className="form-label text-white">Tax Code</label>
+              <input
+                type="text"
+                name="TaxCode"
+                value={formvalue.supplierData.TaxCode}
+                onChange={handleInput}
+                className="form-control"
+                placeholder="Tax Code..."
+              />
+            </div>
+
+            <div className="col-md-2">
+              <label className="form-label text-white">Bank Account</label>
+              <input
+                type="text"
+                name="BankAccount"
+                value={formvalue.supplierData.BankAccount}
+                onChange={handleInput}
+                className="form-control"
+                placeholder="Bank Account..."
               />
             </div>
 
@@ -105,31 +177,11 @@ const Q2: React.FC<Q2Props> = (props) => {
               </div>
             ))}
 
-            <div className="col-md-2">
-              <label className="form-label text-white">Password</label>
-              <input
-                type="password"
-                name="password"
-                value={formvalue.password}
-                onChange={handleInput}
-                className="form-control"
-                placeholder="Password..."
-              />
-            </div>
-
             <div className="col-md-1">
               <label className="form-label text-white">Action</label>
               <button className="form-control btn btn-success">Submit</button>
             </div>
           </form>
-          <div className="col-md-2">
-            <button
-              className="form-control btn btn-success"
-              onClick={addPhoneNumber}
-            >
-              Add Phone Number
-            </button>
-          </div>
         </div>
       </div>
     </Container>
