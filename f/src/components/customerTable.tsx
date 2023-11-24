@@ -5,6 +5,7 @@ import Form from "react-bootstrap/Form";
 import InputGroup from "react-bootstrap/InputGroup";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { debounce } from "lodash";
+import Nav from "./navbar";
 
 interface Customer {
   CustomerCode: string;
@@ -115,6 +116,7 @@ function Q4() {
 
   return (
     <div>
+      <Nav></Nav>
       <Container>
         <h1 className="text-center mt-4">Contact Keeper</h1>
         <Form>

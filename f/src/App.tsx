@@ -11,14 +11,18 @@ import Q3 from "./components/CategoriyTable";
 import Q4 from "./components/customerTable";
 import Create from "./components/form";
 import Navbar from "./components/navbar";
+import LoginPage from "./pages/login";
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 
-function App() {
+const App: React.FC = () => {
   return (
-    <div>
-      <Q3></Q3>
-      <Q2></Q2>
-    </div>
+    <Router>
+      <Routes>
+        <Route path="/login" element={<LoginPage />} />
+        <Route path="/" element={<Q4 />} />
+      </Routes>
+    </Router>
   );
-}
+};
 
 export default App;
