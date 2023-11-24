@@ -118,7 +118,7 @@ function Q4() {
     <div>
       <Nav></Nav>
       <Container>
-        <h1 className="text-center mt-4">Contact Keeper</h1>
+        <h1 className="text-center mt-3 text-4xl font-bold">Past Orders</h1>
         <Form>
           <InputGroup className="my-3">
             <Form.Control
@@ -158,31 +158,6 @@ function Q4() {
             ))}
           </tbody>
         </Table>
-        <div>
-          <h2>Supplier Categories</h2>
-          {/* <Table striped bordered hover>
-            <thead>
-              <tr>
-                <th>Supplier Code</th>
-                <th>Category Code</th>
-                <th>Category Name</th>
-                <th>Quantity</th>
-                <th>Color</th>
-              </tr>
-            </thead>
-            <tbody>
-              {categories.map((category) => (
-                <tr key={category.CategoryCode}>
-                  <td>{category.SupplierCode}</td>
-                  <td>{category.CategoryCode}</td>
-                  <td>{category.CategoryName}</td>
-                  <td>{category.Quantity}</td>
-                  <td>{category.Color}</td>
-                </tr>
-              ))}
-            </tbody>
-          </Table> */}
-        </div>
       </Container>
     </div>
   );

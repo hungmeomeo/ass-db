@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Container } from "react-bootstrap";
+import Nav from "./navbar";
 
 interface Q2Props {}
 
@@ -94,97 +95,100 @@ const Q2: React.FC<Q2Props> = (props) => {
     }
   };
   return (
-    <Container>
-      <div>
-        <div className="col-12 text-success">
-          <h1 className="text-center mt-4">Contact Keeper</h1>
-          <div className="add-del">
-            <button className="btn btn-success" onClick={addPhoneNumber}>
-              Add Phone Number
-            </button>
+    <div>
+      <Nav></Nav>
+      <Container>
+        <h1 className="text-center mt-3 text-4xl font-bold">Add Suppliers</h1>
+        <div>
+          <div className="col-12 text-success">
+            <div className="add-del">
+              <button className="btn btn-success" onClick={addPhoneNumber}>
+                Add Phone Number
+              </button>
 
-            <button className="btn btn-success" onClick={removePhoneNumber}>
-              Remove Phone Number
-            </button>
-          </div>
-
-          <div className="col-md-2"></div>
-
-          <form className="row" onSubmit={handleFormsubmit}>
-            <div className="col-md-2">
-              <label className="form-label text-white">Name</label>
-              <input
-                type="text"
-                name="Name"
-                value={formvalue.supplierData.Name}
-                onChange={handleInput}
-                className="form-control"
-                placeholder="Name..."
-              />
+              <button className="btn btn-success" onClick={removePhoneNumber}>
+                Remove Phone Number
+              </button>
             </div>
 
-            <div className="col-md-2">
-              <label className="form-label text-white">Address</label>
-              <input
-                type="text"
-                name="Address"
-                value={formvalue.supplierData.Address}
-                onChange={handleInput}
-                className="form-control"
-                placeholder="Address..."
-              />
-            </div>
+            <div className="col-md-2"></div>
 
-            <div className="col-md-2">
-              <label className="form-label text-white">Tax Code</label>
-              <input
-                type="text"
-                name="TaxCode"
-                value={formvalue.supplierData.TaxCode}
-                onChange={handleInput}
-                className="form-control"
-                placeholder="Tax Code..."
-              />
-            </div>
-
-            <div className="col-md-2">
-              <label className="form-label text-white">Bank Account</label>
-              <input
-                type="text"
-                name="BankAccount"
-                value={formvalue.supplierData.BankAccount}
-                onChange={handleInput}
-                className="form-control"
-                placeholder="Bank Account..."
-              />
-            </div>
-
-            {formvalue.phoneNumbers.map((phoneNumber, index) => (
-              <div key={index} className="col-md-2">
-                <label className="form-label text-white">
-                  Phone {index + 1}
-                </label>
+            <form className="row" onSubmit={handleFormsubmit}>
+              <div className="col-md-2">
+                <label className="form-label text-white">Name</label>
                 <input
                   type="text"
-                  name={`phoneNumbers[${index}]`}
-                  value={phoneNumber}
-                  onChange={(e) =>
-                    handlePhoneNumberChange(index, e.target.value)
-                  }
+                  name="Name"
+                  value={formvalue.supplierData.Name}
+                  onChange={handleInput}
                   className="form-control"
-                  placeholder={`Phone ${index + 1}...`}
+                  placeholder="Name..."
                 />
               </div>
-            ))}
 
-            <div className="col-md-1">
-              <label className="form-label text-white">Action</label>
-              <button className="form-control btn btn-success">Submit</button>
-            </div>
-          </form>
+              <div className="col-md-2">
+                <label className="form-label text-white">Address</label>
+                <input
+                  type="text"
+                  name="Address"
+                  value={formvalue.supplierData.Address}
+                  onChange={handleInput}
+                  className="form-control"
+                  placeholder="Address..."
+                />
+              </div>
+
+              <div className="col-md-2">
+                <label className="form-label text-white">Tax Code</label>
+                <input
+                  type="text"
+                  name="TaxCode"
+                  value={formvalue.supplierData.TaxCode}
+                  onChange={handleInput}
+                  className="form-control"
+                  placeholder="Tax Code..."
+                />
+              </div>
+
+              <div className="col-md-2">
+                <label className="form-label text-white">Bank Account</label>
+                <input
+                  type="text"
+                  name="BankAccount"
+                  value={formvalue.supplierData.BankAccount}
+                  onChange={handleInput}
+                  className="form-control"
+                  placeholder="Bank Account..."
+                />
+              </div>
+
+              {formvalue.phoneNumbers.map((phoneNumber, index) => (
+                <div key={index} className="col-md-2">
+                  <label className="form-label text-white">
+                    Phone {index + 1}
+                  </label>
+                  <input
+                    type="text"
+                    name={`phoneNumbers[${index}]`}
+                    value={phoneNumber}
+                    onChange={(e) =>
+                      handlePhoneNumberChange(index, e.target.value)
+                    }
+                    className="form-control"
+                    placeholder={`Phone ${index + 1}...`}
+                  />
+                </div>
+              ))}
+
+              <div className="col-md-1">
+                <label className="form-label text-white">Action</label>
+                <button className="form-control btn btn-success">Submit</button>
+              </div>
+            </form>
+          </div>
         </div>
-      </div>
-    </Container>
+      </Container>
+    </div>
   );
 };
 

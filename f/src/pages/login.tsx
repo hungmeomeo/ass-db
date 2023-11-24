@@ -10,8 +10,8 @@ interface LoginResponse {
   token: string;
 }
 
-const MOCK_EMAIL = "hung@gmail.com";
-const MOCK_PASSWORD = "adbvbfd";
+const MOCK_EMAIL = "hunghoang";
+const MOCK_PASSWORD = "12345678";
 
 const LoginPage: React.FC = () => {
   const navigate = useNavigate();
@@ -34,13 +34,13 @@ const LoginPage: React.FC = () => {
         loginData.email === MOCK_EMAIL &&
         loginData.password === MOCK_PASSWORD
       ) {
-        const data: LoginResponse = { token: "123xyz" };
+        const data: LoginResponse = { token: "12345678" };
 
         // Store token in session storage
         sessionStorage.setItem("authToken", data.token);
 
         // Redirect to the dashboard or another protected page
-        navigate("/dashboard");
+        navigate("/q3");
       } else {
         setError("Invalid email or password");
       }
@@ -62,11 +62,11 @@ const LoginPage: React.FC = () => {
         <form className="space-y-6" onSubmit={handleSubmit}>
           <div>
             <label className="block text-sm font-medium text-gray-900">
-              Email
+              Username
             </label>
 
             <input
-              type="email"
+              type="text"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               className="w-full rounded-md border-0 py-1.5 text-gray-900 ring-1 ring-gray-300 focus:ring-indigo-600 sm:text-sm sm:leading-6"

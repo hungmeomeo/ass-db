@@ -1,0 +1,32 @@
+nav {
+  position: absolute;
+  left: 751px;
+  top: 23.2px;
+}
+
+nav ul {
+  list-style-type: none;
+  margin-right: 41.08px;
+  display: flex;
+  align: center;
+}
+
+nav li {
+  display: inline-block;
+  align: center;
+}
+
+nav li:not(:last-child) {
+  margin-right: 60px;
+}
+
+nav a {
+  font-family: "Gilroy", sans-serif;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 19px;
+  line-height: 21px;
+  letter-spacing: 0.06em;
+
+  color: black;
+}

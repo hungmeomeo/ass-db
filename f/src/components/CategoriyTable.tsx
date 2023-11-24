@@ -3,8 +3,16 @@ import Table from "react-bootstrap/Table";
 import Container from "react-bootstrap/Container";
 import Form from "react-bootstrap/Form";
 import InputGroup from "react-bootstrap/InputGroup";
-import "bootstrap/dist/css/bootstrap.min.css";
 import { debounce } from "lodash";
+import Nav from "./navbar";
+
+interface Category {
+  SupplierCode: string;
+  CategoryCode: string;
+  Quantity: number;
+  Color?: string;
+  CategoryName?: string;
+}
 
 interface Supplier {
   SupplierCode: string;
@@ -13,27 +21,13 @@ interface Supplier {
   BankAccount: string;
   TaxCode: string;
   PhoneNumber: string[];
-  Category?: {
-    SupplierCode: string;
-    CategoryCode: string;
-    Quantity: number;
-    Color?: string;
-    CategoryName?: string;
-  }[];
+  Category?: Category[];
 }
 
 function Q3() {
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [suppliers, setSuppliers] = useState<Supplier[]>([]);
-  const [categories, setCategories] = useState<
-    {
-      SupplierCode: string;
-      CategoryCode: string;
-      Quantity: number;
-      Color?: string;
-      CategoryName?: string;
-    }[]
-  >([]);
+  const [categories, setCategories] = useState<Category[]>([]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -64,9 +58,7 @@ function Q3() {
       console.log(clickedSupplier);
 
       // Set the categories for the clicked supplier
-
       setCategories(clickedSupplier?.Category || []);
-      console.log(categories);
     } catch (error) {
       console.error("Error fetching data:", error);
     }
@@ -80,18 +72,20 @@ function Q3() {
 
   const filteredSuppliers = searchTerm
     ? suppliers.filter(
-        (supplier) =>
+        (supplier: Supplier) =>
           supplier.Name.toLowerCase().includes(lowerCaseSearchTerm) ||
-          supplier.PhoneNumber.some((number) =>
-            number.toLowerCase().includes(lowerCaseSearchTerm)
+          supplier.PhoneNumber.some(
+            (number) =>
+              number && number.toLowerCase().includes(lowerCaseSearchTerm)
           )
       )
     : suppliers;
 
   return (
     <div>
+      <Nav></Nav>
       <Container>
-        <h1 className="text-center mt-4">Contact Keeper</h1>
+        <h1 className="text-center mt-3 text-4xl font-bold">Supplier Info</h1>
         <Form>
           <InputGroup className="my-3">
             <Form.Control
