@@ -11,7 +11,7 @@ async function getOrders() {
               C.Address AS CustomerAddress,
               C.PhoneNumber AS CustomerPhoneNumber,
               F.CategoryCode,
-              F.Name AS FabricName,
+              F.CategoryName AS FabricName,
               F.Color,
               F.Quantity,
               B.Length,

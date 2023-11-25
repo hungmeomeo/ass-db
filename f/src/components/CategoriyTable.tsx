@@ -3,8 +3,16 @@ import Table from "react-bootstrap/Table";
 import Container from "react-bootstrap/Container";
 import Form from "react-bootstrap/Form";
 import InputGroup from "react-bootstrap/InputGroup";
-import "bootstrap/dist/css/bootstrap.min.css";
 import { debounce } from "lodash";
+import Nav from "./navbar";
+
+interface Category {
+  SupplierCode: string;
+  CategoryCode: string;
+  Quantity: number;
+  Color?: string;
+  CategoryName?: string;
+}
 
 interface Supplier {
   SupplierCode: string;
@@ -13,11 +21,13 @@ interface Supplier {
   BankAccount: string;
   TaxCode: string;
   PhoneNumber: string[];
+  Category?: Category[];
 }
 
-function Q1() {
+function Q3() {
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [suppliers, setSuppliers] = useState<Supplier[]>([]);
+  const [categories, setCategories] = useState<Category[]>([]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -33,8 +43,25 @@ function Q1() {
     fetchData();
   }, []);
 
-  const handleButtonClick = (supplierCode: string) => {
-    console.log(`Button clicked for SupplierCode: ${supplierCode}`);
+  const handleButtonClick = async (SupplierCode: string) => {
+    console.log(`Button clicked for SupplierCode: ${SupplierCode}`);
+    try {
+      const response = await fetch(
+        "http://localhost:3000/suppliers/categories"
+      );
+      const data = await response.json();
+      console.log(data);
+      // Find the supplier with the clicked supplier code
+      const clickedSupplier = data.find(
+        (supplier: Supplier) => supplier.SupplierCode === SupplierCode
+      );
+      console.log(clickedSupplier);
+
+      // Set the categories for the clicked supplier
+      setCategories(clickedSupplier?.Category || []);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
   };
 
   const lowerCaseSearchTerm = searchTerm.toLowerCase();
@@ -45,18 +72,20 @@ function Q1() {
 
   const filteredSuppliers = searchTerm
     ? suppliers.filter(
-        (supplier) =>
+        (supplier: Supplier) =>
           supplier.Name.toLowerCase().includes(lowerCaseSearchTerm) ||
-          supplier.PhoneNumber.some((number) =>
-            number.toLowerCase().includes(lowerCaseSearchTerm)
+          supplier.PhoneNumber.some(
+            (number) =>
+              number && number.toLowerCase().includes(lowerCaseSearchTerm)
           )
       )
     : suppliers;
 
   return (
     <div>
+      <Nav></Nav>
       <Container>
-        <h1 className="text-center mt-4">Contact Keeper</h1>
+        <h1 className="text-center mt-3 text-4xl font-bold">Supplier Info</h1>
         <Form>
           <InputGroup className="my-3">
             <Form.Control
@@ -74,7 +103,7 @@ function Q1() {
               <th>Bank Account</th>
               <th>Tax Code</th>
               <th>Phone Number</th>
-              <th>Action</th>
+              <th>Categories</th>
             </tr>
           </thead>
           <tbody>
@@ -97,9 +126,34 @@ function Q1() {
             ))}
           </tbody>
         </Table>
+        <div>
+          <h2>Supplier Categories</h2>
+          <Table striped bordered hover>
+            <thead>
+              <tr>
+                <th>Supplier Code</th>
+                <th>Category Code</th>
+                <th>Category Name</th>
+                <th>Quantity</th>
+                <th>Color</th>
+              </tr>
+            </thead>
+            <tbody>
+              {categories.map((category) => (
+                <tr key={category.CategoryCode}>
+                  <td>{category.SupplierCode}</td>
+                  <td>{category.CategoryCode}</td>
+                  <td>{category.CategoryName}</td>
+                  <td>{category.Quantity}</td>
+                  <td>{category.Color}</td>
+                </tr>
+              ))}
+            </tbody>
+          </Table>
+        </div>
       </Container>
     </div>
   );
 }
 
-export default Q1;
+export default Q3;

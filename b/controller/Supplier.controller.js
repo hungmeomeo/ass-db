@@ -76,7 +76,7 @@ async function getAllSuppliers() {
 async function getAllCategories() {
   try {
     const [results, metadata] = await sequelize.query(`
-      SELECT Suppliers.SupplierCode, Suppliers.Name, Suppliers.Address, Suppliers.BankAccount, Suppliers.TaxCode, FabricCategories.Quantity, FabricCategories.CategoryCode
+      SELECT Suppliers.SupplierCode, Suppliers.Name, Suppliers.Address, Suppliers.BankAccount, Suppliers.TaxCode, FabricCategories.Quantity, FabricCategories.CategoryCode,FabricCategories.Color, FabricCategories.CategoryName
       FROM Suppliers
       LEFT JOIN FabricCategories ON Suppliers.SupplierCode = FabricCategories.SupplierCode
     `);
@@ -88,8 +88,11 @@ async function getAllCategories() {
 
       if (existingSupplier) {
         existingSupplier.Category.push({
+          SupplierCode: result.SupplierCode,
           CategoryCode: result.CategoryCode,
           Quantity: result.Quantity,
+          Color: result.Color,
+          CategoryName: result.CategoryName,
         });
       } else {
         acc.push({
@@ -100,8 +103,11 @@ async function getAllCategories() {
           TaxCode: result.TaxCode,
           Category: [
             {
+              SupplierCode: result.SupplierCode,
               CategoryCode: result.CategoryCode,
               Quantity: result.Quantity,
+              Color: result.Color,
+              CategoryName: result.CategoryName,
             },
           ],
         });
