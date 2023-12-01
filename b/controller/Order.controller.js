@@ -4,35 +4,41 @@ async function getOrders() {
   {
     try {
       const [results, metadata] = await sequelize.query(`
-            SELECT
-              C.CustomerCode,
-              C.FirstName AS CustomerFirstName,
-              C.LastName AS CustomerLastName,
-              C.Address AS CustomerAddress,
-              C.PhoneNumber AS CustomerPhoneNumber,
-              F.CategoryCode,
-              F.CategoryName AS FabricName,
-              F.Color,
-              F.Quantity,
-              B.Length,
-              O.OrderCode,
-              O.OrderDate,
-              O.TotalPrice,
-              O.OrderStatus,
-              P.PaymentDate,
-              P.Amount
-            FROM
-              Customers C
-            LEFT JOIN
-              Orders O ON C.CustomerCode = O.CustomerCode
-            LEFT JOIN
-              Bolts B ON O.OrderCode = B.OrderCode
-            LEFT JOIN
-              FabricCategories F ON B.CategoryCode = F.CategoryCode
-            LEFT JOIN
-              PaymentHistory P ON O.OrderCode = P.OrderCode
-            ORDER BY
-              C.CustomerCode, F.CategoryCode, O.OrderCode, P.PaymentDate;
+      SELECT
+      C.CustomerCode,
+      C.FirstName AS CustomerFirstName,
+      C.LastName AS CustomerLastName,
+      C.Address AS CustomerAddress,
+      C.PhoneNumber AS CustomerPhoneNumber,
+      F.CategoryCode,
+      F.CategoryName AS FabricName,
+      F.Color,
+      F.Quantity,
+      B.BoltCode,
+      B.Length,
+      O.OrderCode,
+      O.OrderDate,
+      O.TotalPrice,
+      O.OrderStatus,
+      P.PaymentDate,
+      P.Amount,
+      E.EmployeeCode As EmployeeCode,
+      E.Name As EmployeeName
+    FROM
+      Customers C
+
+    LEFT JOIN
+      Orders O ON C.CustomerCode = O.CustomerCode
+LEFT JOIN 
+Employees E on E.EmployeeCode = O.EmployeeCode
+    LEFT JOIN
+      Bolts B ON O.OrderCode = B.OrderCode
+    LEFT JOIN
+      FabricCategories F ON B.CategoryCode = F.CategoryCode
+    LEFT JOIN
+      PaymentHistory P ON O.OrderCode = P.OrderCode
+    ORDER BY
+      C.CustomerCode, F.CategoryCode, O.OrderCode, P.PaymentDate
           `);
 
       const customers = [];
@@ -67,6 +73,7 @@ async function getOrders() {
 
         if (!currentOrder || currentOrder.OrderCode !== result.OrderCode) {
           currentOrder = {
+            CategoryCode: result.CategoryCode,
             FabricName: result.FabricName,
             Color: result.Color,
             Quantity: result.Quantity,
@@ -75,7 +82,11 @@ async function getOrders() {
             TotalPrice: result.TotalPrice,
             OrderStatus: result.OrderStatus,
             PaymentDate: result.PaymentDate,
+            BoltCode: result.BoltCode,
             Amount: result.Amount,
+            Length: result.Length,
+            EmployeeID: result.EmployeeCode,
+            EmployeeName: result.EmployeeName,
           };
           currentCategory.Orders.push(currentOrder);
         }
@@ -109,8 +120,6 @@ async function getCategoriesByCustomerCode(customerCode) {
     throw error;
   }
 }
-
-getCategoriesByCustomerCode("Cust4");
 
 module.exports = {
   getOrders,
