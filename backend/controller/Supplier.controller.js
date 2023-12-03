@@ -108,6 +108,7 @@ async function getAllCategories() {
               Quantity: result.Quantity,
               Color: result.Color,
               CategoryName: result.CategoryName,
+              HistoryPrice: [],
             },
           ],
         });
