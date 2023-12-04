@@ -134,7 +134,7 @@ function Q3() {
                 <th>Supplier Code</th>
                 <th>Category Code</th>
                 <th>Category Name</th>
-                <th>Quantity</th>
+                <th>Available Quantity</th>
                 <th>Color</th>
               </tr>
             </thead>

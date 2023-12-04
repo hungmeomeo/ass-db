@@ -12,7 +12,7 @@ interface Customer {
   CustomerFirstName: string;
   CustomerLastName: string;
   CustomerAddress: string;
-  CustomerPhoneNumber: string;
+  PhoneNumber: string[];
 }
 
 function Q4() {
@@ -24,7 +24,7 @@ function Q4() {
       CustomerFirstName: string;
       CustomerLastName: string;
       CustomerAddress: string;
-      CustomerPhoneNumber: string;
+      PhoneNumber: string[];
     }[]
   >([]);
 
@@ -110,7 +110,10 @@ function Q4() {
           customer.CustomerLastName.toLowerCase().includes(
             lowerCaseSearchTerm
           ) ||
-          customer.CustomerPhoneNumber.includes(lowerCaseSearchTerm)
+          customer.PhoneNumber.some(
+            (number) =>
+              number && number.toLowerCase().includes(lowerCaseSearchTerm)
+          )
       )
     : customers;
 
@@ -146,7 +149,7 @@ function Q4() {
                 <td>{customer.CustomerFirstName}</td>
                 <td>{customer.CustomerLastName}</td>
                 <td>{customer.CustomerAddress}</td>
-                <td>{customer.CustomerPhoneNumber}</td>
+                <td>{customer.PhoneNumber.join(",")}</td>
                 <td>
                   <button
                     onClick={() => handleButtonClick(customer.CustomerCode)}
