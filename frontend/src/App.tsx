@@ -4,7 +4,7 @@ import Container from "react-bootstrap/Container";
 import Form from "react-bootstrap/Form";
 import InputGroup from "react-bootstrap/InputGroup";
 import "bootstrap/dist/css/bootstrap.min.css";
-import Q1 from "./components/table";
+import Q1 from "./components/a";
 import Q2 from "./components/form";
 import Q3 from "./components/CategoriyTable";
 import Q4 from "./components/customerTable";
@@ -20,6 +20,7 @@ function App() {
         <Route path="/" element={<LoginPage />} />
         <Route path="/q4" element={<Q4 />} />
         <Route path="/q3" element={<Q3 />} />
+        <Route path="/q1" element={<Q1 />} />
         <Route path="/q2" element={<Q2 />} />
       </Routes>
     </Router>

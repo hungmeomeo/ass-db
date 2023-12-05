@@ -10,7 +10,6 @@ import Picker from "../utils/picker";
 interface Category {
   SupplierCode: string;
   CategoryCode: string;
-  Quantity: number;
   Color?: string;
   CategoryName?: string;
   HistoryPrice?: string[];
@@ -26,7 +25,7 @@ interface Supplier {
   Category?: Category[];
 }
 
-function Q3() {
+function Q1() {
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [suppliers, setSuppliers] = useState<Supplier[]>([]);
   const [categories, setCategories] = useState<Category[]>([]);
@@ -48,9 +47,7 @@ function Q3() {
   const handleButtonClick = async (SupplierCode: string) => {
     console.log(`Button clicked for SupplierCode: ${SupplierCode}`);
     try {
-      const response = await fetch(
-        "http://localhost:3000/suppliers/categories"
-      );
+      const response = await fetch("http://localhost:3000/suppliers/import");
       const data = await response.json();
       console.log(data);
       // Find the supplier with the clicked supplier code
@@ -87,7 +84,7 @@ function Q3() {
       <Nav></Nav>
 
       <Container>
-        <h1 className="text-center mt-3 text-4xl font-bold">Category Info</h1>
+        <h1 className="text-center mt-3 text-4xl font-bold">Supply Info</h1>
 
         <Form>
           <InputGroup className="my-3">
@@ -131,16 +128,15 @@ function Q3() {
           </tbody>
         </Table>
         <div>
-          <h2>Supplier Categories</h2>
+          <h2>Historical Supply</h2>
           <Table striped bordered hover>
             <thead>
               <tr>
                 <th>Supplier Code</th>
                 <th>Category Code</th>
                 <th>Category Name</th>
-                <th>Available Quantity</th>
                 <th>Color</th>
-                <th>History Price</th>
+                <th>Historical Import Info</th>
               </tr>
             </thead>
             <tbody>
@@ -149,7 +145,7 @@ function Q3() {
                   <td>{category.SupplierCode}</td>
                   <td>{category.CategoryCode}</td>
                   <td>{category.CategoryName}</td>
-                  <td>{category.Quantity}</td>
+
                   <td>{category.Color}</td>
                   <td>
                     {category.HistoryPrice?.map((price, index) => (
@@ -166,4 +162,4 @@ function Q3() {
   );
 }
 
-export default Q3;
+export default Q1;
