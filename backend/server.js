@@ -2,7 +2,7 @@ const express = require("express");
 require("dotenv").config();
 const app = express();
 const cors = require("cors"); // Import the cors package
-const handleSupplier = require("./routes/ass.route");
+const handleSupplier = require("./routes/supplier.route");
 const port = process.env.PORT || 3000;
 const cookieParser = require("cookie-parser");
 const sequelize = require("./database/sequelize")

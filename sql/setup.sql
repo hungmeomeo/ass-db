@@ -310,7 +310,6 @@ END //
 
 DELIMITER ;
 
-
 /* chay code
 UPDATE CurrentPrices
 INNER JOIN	FabricCategories ON CurrentPrices.CategoryCode = FabricCategories.CategoryCode
@@ -341,10 +340,5 @@ from Suppliers, FabricCategories
 where Suppliers.SupplierCode = FabricCategories.SupplierCode
 group by Suppliers.SupplierCode;
 */
-
-
-
-
-
 
 

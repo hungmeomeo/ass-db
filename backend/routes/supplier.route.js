@@ -5,6 +5,7 @@ const {
   getAllCategories,
 } = require("../controller/Supplier.controller");
 const { getOrders } = require("../controller/Order.controller");
+const { getImport } = require("../controller/Import.controller");
 const PDFDocument = require("pdfkit");
 const path = require("path");
 const router = Router();
@@ -32,6 +33,16 @@ router.post("/add", async (req, res) => {
 router.get("/all", async (req, res) => {
   try {
     const suppliers = await getAllSuppliers();
+    res.json(suppliers);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+});
+
+router.get("/import", async (req, res) => {
+  try {
+    const suppliers = await getImport();
     res.json(suppliers);
   } catch (error) {
     console.error(error);

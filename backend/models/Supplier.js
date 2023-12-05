@@ -5,8 +5,8 @@ const sequelize = require("../database/sequelize"); // Assuming you've configure
 function generateRandomCode() {
   const characters =
     "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-  let code = "";
-  for (let i = 0; i < 4; i++) {
+  let code = "SUP0";
+  for (let i = 0; i < 2; i++) {
     code += characters.charAt(Math.floor(Math.random() * characters.length));
   }
   return code;

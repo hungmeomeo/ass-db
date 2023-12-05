@@ -1,3 +1,4 @@
+const { and } = require("sequelize");
 const sequelize = require("../database/sequelize");
 const Supplier = require("../models/Supplier");
 const SupplierPhoneNumber = require("../models/SupplierPhoneNumber");
@@ -76,9 +77,24 @@ async function getAllSuppliers() {
 async function getAllCategories() {
   try {
     const [results, metadata] = await sequelize.query(`
-      SELECT Suppliers.SupplierCode, Suppliers.Name, Suppliers.Address, Suppliers.BankAccount, Suppliers.TaxCode, FabricCategories.Quantity, FabricCategories.CategoryCode,FabricCategories.Color, FabricCategories.CategoryName
-      FROM Suppliers
-      LEFT JOIN FabricCategories ON Suppliers.SupplierCode = FabricCategories.SupplierCode
+      SELECT
+        Suppliers.SupplierCode,
+        Suppliers.Name,
+        Suppliers.Address,
+        Suppliers.BankAccount,
+        Suppliers.TaxCode,
+        FabricCategories.Quantity,
+        FabricCategories.CategoryCode,
+        FabricCategories.Color,
+        FabricCategories.CategoryName,
+        IP.CurrentPrice,
+        IP.PriceDate
+      FROM
+        Suppliers
+      LEFT JOIN
+        FabricCategories ON Suppliers.SupplierCode = FabricCategories.SupplierCode
+      LEFT JOIN
+        CurrentPrices IP ON IP.CategoryCode = FabricCategories.CategoryCode
     `);
 
     const mergedResults = results.reduce((acc, result) => {
@@ -87,14 +103,30 @@ async function getAllCategories() {
       );
 
       if (existingSupplier) {
-        existingSupplier.Category.push({
-          SupplierCode: result.SupplierCode,
-          CategoryCode: result.CategoryCode,
-          Quantity: result.Quantity,
-          Color: result.Color,
-          CategoryName: result.CategoryName,
-        });
+        const existingCategory = existingSupplier.Category.find(
+          (category) => category.CategoryCode === result.CategoryCode
+        );
+
+        if (existingCategory) {
+          // If the category already exists, add to HistoryPrice array\
+          existingCategory.HistoryPrice.push(
+            `Date: ${result.PriceDate}, Price: ${result.CurrentPrice}`
+          );
+        } else {
+          // If the category does not exist, add a new category
+          existingSupplier.Category.push({
+            SupplierCode: result.SupplierCode,
+            CategoryCode: result.CategoryCode,
+            Quantity: result.Quantity,
+            Color: result.Color,
+            CategoryName: result.CategoryName,
+            HistoryPrice: [
+              `Date: ${result.PriceDate}, Price: ${result.CurrentPrice}`,
+            ],
+          });
+        }
       } else {
+        // If the supplier does not exist, add a new supplier along with the first category
         acc.push({
           SupplierCode: result.SupplierCode,
           Name: result.Name,
@@ -108,7 +140,9 @@ async function getAllCategories() {
               Quantity: result.Quantity,
               Color: result.Color,
               CategoryName: result.CategoryName,
-              HistoryPrice: [],
+              HistoryPrice: [
+                `Date: ${result.PriceDate}, Price: ${result.CurrentPrice}`,
+              ],
             },
           ],
         });
@@ -117,7 +151,12 @@ async function getAllCategories() {
       return acc;
     }, []);
 
-    return mergedResults;
+    // Remove suppliers that have categories set to NULL
+    const filteredResults = mergedResults.filter(
+      (supplier) => supplier.Category[0].CategoryName != null
+    );
+
+    return filteredResults;
   } catch (error) {
     console.error("Error retrieving categories:", error);
     throw error;
