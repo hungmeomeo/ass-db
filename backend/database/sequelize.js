@@ -1,8 +1,14 @@
 const { Sequelize } = require("sequelize");
+require("dotenv").config();
 
-const sequelize = new Sequelize("fabric", "root", "Hung111103!", {
-  host: "localhost",
-  dialect: "mysql",
-});
+const sequelize = new Sequelize(
+  process.env.DB,
+  process.env.USER,
+  process.env.PW,
+  {
+    host: process.env.HOST,
+    dialect: "mysql",
+  }
+);
 
 module.exports = sequelize;
